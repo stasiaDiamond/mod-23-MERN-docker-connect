@@ -1,0 +1,22 @@
+version: '3.9'  # It's good to use the latest supported version
+services:
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+
+  server:  # Naming it 'server' as it's more descriptive of its role
+    build: ./server
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/isThisThingOn # Use a descriptive DB name
+
+  client:
+    build: ./client
+    ports:
+      - '3000:3000'
+    depends_on:
+      - server
